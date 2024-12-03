@@ -43,8 +43,33 @@ fun main() {
         return sum
     }
 
+    fun part2Optimize(input: List<String>): Int {
+        val longText = input.joinToString("")
+        val multiplyRegex = Regex("mul\\((\\d{1,3}),(\\d{1,3})\\)|do(?:n't)?\\(\\)")
+
+        var isMultiplyEnabled = true
+        var sum = 0
+
+        multiplyRegex.findAll(longText)
+            .forEach { matchResult ->
+                when (matchResult.value) {
+                    "do()", "don't()" -> isMultiplyEnabled = matchResult.value == "do()"
+                    else -> {
+                        if (isMultiplyEnabled) {
+                            val op1 = matchResult.groupValues[1].toInt()
+                            val op2 = matchResult.groupValues[2].toInt()
+                            sum += op1 * op2
+                        }
+                    }
+                }
+            }
+
+        return sum
+    }
+
 
     val input = readInput("Day03")
     part1(input).println()
     part2(input).println()
+    part2Optimize(input).println()
 }
