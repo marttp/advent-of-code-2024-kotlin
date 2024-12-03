@@ -24,7 +24,7 @@ fun main() {
     part2(input).println()
 }
 
-fun checkSafeWithDampener(report: List<Int>): Boolean {
+internal fun checkSafeWithDampener(report: List<Int>): Boolean {
     if (report.size == 1) {
         return true
     }
@@ -41,7 +41,7 @@ fun checkSafeWithDampener(report: List<Int>): Boolean {
     return false
 }
 
-fun checkSafe(report: List<Int>): Boolean {
+internal fun checkSafe(report: List<Int>): Boolean {
     if (report.size == 1) {
         return true
     }
