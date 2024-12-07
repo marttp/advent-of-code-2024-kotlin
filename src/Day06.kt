@@ -1,3 +1,4 @@
+import Day06.EMPTY
 import Day06.MARKED
 import Day06.OBSTACLE
 import Day06.STARTER
@@ -44,7 +45,19 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return 0
+        val grid = input.map { it.toCharArray() }.toTypedArray()
+        val currentPoint = grid.findStartingPoint()
+        var validNewObstacleCount = 0
+        for (r in grid.indices) {
+            for (c in grid[r].indices) {
+                if (grid[r][c] == EMPTY) {
+                    if (tryPathWithObstacle(grid, currentPoint, Point2D(r, c))) {
+                        validNewObstacleCount++
+                    }
+                }
+            }
+        }
+        return validNewObstacleCount
     }
 
     val input = readInput("Day06")
@@ -88,3 +101,35 @@ internal fun turnRight(dir: Point2D) = when (dir) {
     SOUTH -> WEST
     else -> NORTH
 }
+
+internal fun tryPathWithObstacle(grid: Array<CharArray>, start: Point2D, obstaclePosition: Point2D): Boolean {
+    if (obstaclePosition == start) {
+        return false
+    }
+
+    grid[obstaclePosition] = OBSTACLE
+    var currentState = State(start, NORTH)
+    val visited: HashSet<State> = HashSet()
+    visited.add(currentState)
+
+    while (true) {
+        val nextPosition: Point2D = currentState.position + currentState.direction
+        if (!grid.isInBounds(nextPosition)) {
+            grid[obstaclePosition] = EMPTY
+            return false
+        }
+
+        currentState = if (grid[nextPosition] == OBSTACLE) {
+            State(currentState.position, turnRight(currentState.direction))
+        } else {
+            State(nextPosition, currentState.direction)
+        }
+
+        if (!visited.add(currentState)) {
+            grid[obstaclePosition] = EMPTY
+            return true
+        }
+    }
+}
+
+internal data class State(val position: Point2D, val direction: Point2D)
