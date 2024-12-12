@@ -28,6 +28,12 @@ fun List<List<Int>>.isInBounds(point: Point2D) =
     point.row in indices &&
             point.column in 0 until this[0].size
 
+operator fun List<List<Int>>.get(at: Point2D): Int = this[at.row][at.column]
+
+operator fun List<MutableList<Int>>.set(at: Point2D, n: Int) {
+    this[at.row][at.column] = n
+}
+
 // Other Util
 
 // Positive modulo
