@@ -4,13 +4,22 @@ import helper.util.readInput
 
 fun main() {
 
-    fun part1(input: List<String>): String {
+    fun part1(input: List<String>): Int {
         val ramRun = RamRun(70, 70, input.take(1024))
-        return ramRun.shortestPath(Point2D(0, 0), Point2D(70, 70)).toString()
+        return ramRun.shortestPath(Point2D(0, 0), Point2D(70, 70))
     }
 
-    fun part2(input: List<String>): Long {
-        return 0
+    fun part2(input: List<String>): String {
+        var bytes = 1
+        while (bytes < input.size) {
+            val ramRun = RamRun(70, 70, input.take(bytes))
+            val result = ramRun.shortestPath(Point2D(0, 0), Point2D(70, 70))
+            if (result == 0) {
+                return input[bytes - 1]
+            }
+            bytes++
+        }
+        return "0,0"
     }
 
     val input = readInput("Day18")
@@ -48,7 +57,7 @@ class RamRun(x: Int, y: Int, bytes: List<String>) {
             }
         }
 
-        return -1
+        return 0
     }
 
     companion object {
